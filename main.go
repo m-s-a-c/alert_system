@@ -72,32 +72,21 @@ func main() {
 
 	var blockWorkerUrl = "https://" + config.Configuration.NetworkSubdomain + "." + config.Configuration.NetworkDomain + "/network"
 	fmt.Println("blockWorker url:", blockWorkerUrl)
-	var prov *chain.Providers
-	prov = chain.GetProvidersURL(blockWorkerUrl)
+	prov := chain.GetProvidersURL(blockWorkerUrl)
 	activeSharders, inActiveSharders := chain.CheckUrlStatus(prov.Sharders)
 	activeMiners, inActiveMiners := chain.CheckUrlStatus(prov.Miners)
 
-	for _, s := range inActiveSharders {
-		fmt.Println(s)
+	roundMiner, err := chain.CheckProviderRound(activeMiners)
+	if err != nil {
+		fmt.Println(err)
 	}
-	for _, m := range inActiveMiners {
-		fmt.Println(m)
-	}
-
-	for _, as := range activeSharders {
-		fmt.Println(as)
-	}
-	for _, am := range activeMiners {
-		fmt.Println(am)
-	}
-
-	rounds, err := chain.CheckProviderRound(activeMiners)
+	roundSharder, err := chain.CheckProviderRound(activeSharders)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	laggingMiners := chain.LaggingProviders(rounds)
-	laggingSharders := chain.LaggingProviders(rounds)
+	laggingMiners := chain.LaggingProviders(roundMiner)
+	laggingSharders := chain.LaggingProviders(roundSharder)
 
 	err = slack.SendSlackMessage(inActiveSharders, "unreachable", "SHARDERS", config.Configuration.SlackWebhook, "#testing")
 	if err != nil {
