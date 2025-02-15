@@ -17,10 +17,35 @@ const (
 type Config struct {
 	NetworkSubdomain string
 	NetworkDomain    string
-	Port             int
-	DeploymentMode   byte
-	UseHTTPS         bool
-	UsePath          bool
+
+	Port           int
+	DeploymentMode byte
+
+	UseHTTPS bool
+	UsePath  bool
+
+	SlackWebhook          string
+	KafkaEnabled          bool
+	KafkaHost             string
+	KafkaUsername         string
+	KafkaPassword         string
+	KafkaEventsTopic      string
+	KafkaEventsGroupID    string
+	KafkaEventsRetryTopic string
+
+	RedisHost     string
+	RedisPassword string
+	RedisDB       string
+
+	ElasticUsername string
+	ElasticPassword string
+	ElasticHost     string
+	ElasticPort     string
+
+	VaultKey          string
+	PortainerUsername string
+	PortainerPassword string
+	PortainerHost     string
 }
 
 var (

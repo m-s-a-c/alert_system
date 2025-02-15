@@ -36,7 +36,7 @@ elastic:
   port: 9200
 
 vault:
-  key: key
+  key: "value"
 
 portainer:
   username: "admin"
