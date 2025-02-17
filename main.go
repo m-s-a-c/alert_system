@@ -26,6 +26,7 @@ func initializeConfig() {
 	config.Configuration.UsePath = viper.GetBool("use_path")
 
 	config.Configuration.SlackWebhook = viper.GetString("slack.webhook")
+	config.Configuration.SlackChannel = viper.GetString("slack.channel")
 
 	config.Configuration.KafkaEnabled = viper.GetBool("kafka.enabled")
 	config.Configuration.KafkaHost = viper.GetString("kafka.host")
@@ -90,23 +91,23 @@ func main() {
 	laggingSharders := chain.LaggingProviders(roundSharder)
 	resultMsg, resultBool := box.ZboxReplication(roundMiner)
 
-	err = slack.SendSlackMessage(inActiveSharders, "unreachable", "SHARDERS", config.Configuration.SlackWebhook, "#testing")
+	err = slack.SendSlackMessage(inActiveSharders, "unreachable", "SHARDERS", config.Configuration.SlackWebhook, config.Configuration.SlackChannel)
 	if err != nil {
 		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
-	err = slack.SendSlackMessage(inActiveMiners, "unreachable", "MINERS", config.Configuration.SlackWebhook, "#testing")
+	err = slack.SendSlackMessage(inActiveMiners, "unreachable", "MINERS", config.Configuration.SlackWebhook, config.Configuration.SlackChannel)
 	if err != nil {
 		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
-	err = slack.SendSlackMessage(laggingMiners, "lagging", "MINERS", config.Configuration.SlackWebhook, "#testing")
+	err = slack.SendSlackMessage(laggingMiners, "lagging", "MINERS", config.Configuration.SlackWebhook, config.Configuration.SlackChannel)
 	if err != nil {
 		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
-	err = slack.SendSlackMessage(laggingSharders, "lagging", "MINERS", config.Configuration.SlackWebhook, "#testing")
+	err = slack.SendSlackMessage(laggingSharders, "lagging", "SHARDERS", config.Configuration.SlackWebhook, config.Configuration.SlackChannel)
 	if err != nil {
 		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
-	err = slack.SimpleSlackMessage(resultMsg, config.Configuration.SlackWebhook, "#testing", resultBool)
+	err = slack.SimpleSlackMessage(resultMsg, config.Configuration.SlackWebhook, config.Configuration.SlackChannel, resultBool)
 	if err != nil {
 		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
