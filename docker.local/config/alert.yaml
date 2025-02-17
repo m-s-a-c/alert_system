@@ -1,0 +1,44 @@
+logging:
+  level: "debug"
+  console: false
+
+alert:
+  port: 9090
+
+network:
+  subdomain: dev
+  domain: zus.network
+
+use_https: true
+use_path: true
+
+slack:
+  webhook: webhook
+
+kafka:
+  enabled: false
+  host: "91.107.200.12:9092"
+  username: "admin"
+  password: "zus-operator"
+  eventsTopic: "events"
+  eventsGroupId: "events-consumer"
+  eventsRetryTopic: "events-retry"
+
+redis:
+  host: "redis:6379"
+  password: "redis_pass"
+  db: 0
+
+elastic:
+  username: admin
+  password: zus-operator
+  host: elasticsearch
+  port: 9200
+
+vault:
+  key: "value"
+
+portainer:
+  username: "admin"
+  password: "zus-operator"
+  host: "zs.zus.network"
