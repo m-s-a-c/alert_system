@@ -25,6 +25,7 @@ type Config struct {
 	UsePath  bool
 
 	SlackWebhook          string
+	SlackChannel          string
 	KafkaEnabled          bool
 	KafkaHost             string
 	KafkaUsername         string

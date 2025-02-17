@@ -13,6 +13,7 @@ use_https: true
 use_path: true
 
 slack:
+  channel: #testing
   webhook: webhook
 
 kafka:
