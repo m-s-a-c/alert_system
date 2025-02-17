@@ -158,7 +158,7 @@ func LaggingProviders(provL []map[string]interface{}) []interface{} {
 		ro := rUrl["round"].(string)
 		amm3, _ := strconv.Atoi(ro)
 		if amm3 < (maxRound - 100) {
-			data = append(data, rUrl["url"].(string) + " is behind the current round at " + rUrl["round"].(string))
+			data = append(data, rUrl["url"].(string)+" is behind the current round at "+rUrl["round"].(string))
 		}
 	}
 

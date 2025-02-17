@@ -10,6 +10,7 @@ import (
 
 	"github.com/m-s-a-c/alert_system.git/core/config"
 	logging "github.com/m-s-a-c/alert_system.git/core/logger"
+	box "github.com/m-s-a-c/alert_system.git/core/providers/0box"
 	chain "github.com/m-s-a-c/alert_system.git/core/providers/0chain"
 	"github.com/m-s-a-c/alert_system.git/core/slack"
 	"github.com/spf13/viper"
@@ -87,21 +88,26 @@ func main() {
 
 	laggingMiners := chain.LaggingProviders(roundMiner)
 	laggingSharders := chain.LaggingProviders(roundSharder)
+	resultMsg, resultBool := box.ZboxReplication(roundMiner)
 
 	err = slack.SendSlackMessage(inActiveSharders, "unreachable", "SHARDERS", config.Configuration.SlackWebhook, "#testing")
 	if err != nil {
-		log.Fatalf("Slack notification failed: ", err)
+		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
 	err = slack.SendSlackMessage(inActiveMiners, "unreachable", "MINERS", config.Configuration.SlackWebhook, "#testing")
 	if err != nil {
-		log.Fatalf("Slack notification failed: ", err)
+		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
 	err = slack.SendSlackMessage(laggingMiners, "lagging", "MINERS", config.Configuration.SlackWebhook, "#testing")
 	if err != nil {
-		log.Fatalf("Slack notification failed: ", err)
+		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
 	err = slack.SendSlackMessage(laggingSharders, "lagging", "MINERS", config.Configuration.SlackWebhook, "#testing")
 	if err != nil {
-		log.Fatalf("Slack notification failed: ", err)
+		log.Fatalf("ALERT: Slack notification failed: ", err)
+	}
+	err = slack.SimpleSlackMessage(resultMsg, config.Configuration.SlackWebhook, "#testing", resultBool)
+	if err != nil {
+		log.Fatalf("ALERT: Slack notification failed: ", err)
 	}
 }
